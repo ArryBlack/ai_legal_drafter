@@ -202,7 +202,7 @@ async function validate(){
 
                             Hallucinated Citations:
                             ${(validationData.hallucinated_citations || []).map(cit => `- ${safeFormat(cit)}`).join('\n')}`;
-                            
+
                         document.getElementById("validation").innerText = validationText
                         status.innerText = "Validation complete"
                         setControlsEnabled(true)
@@ -258,15 +258,7 @@ async function generate(){
         data.citations.forEach((c) => {
             let btn = document.createElement("button")
             btn.innerText = c.case_name
-            btn.onclick = () => {
-                alert(
-                    "Description:" + c.description +
-                    "\nWhy cited:" + c.why_cited +
-                    "\nRelevance:" + c.relevance_score +
-                    "\nStrength:" + c.strength_score +
-                    "\nLink:" + c.link
-                )
-            }
+            btn.onclick = () => openModal(c) // Replaced alert with openModal
             div.appendChild(btn)
         })
 
@@ -335,3 +327,29 @@ async function download(){
     }
 }
 
+function openModal(citation) {
+    document.getElementById('modalTitle').innerText = citation.case_name || 'Unknown Case';
+    document.getElementById('modalCourt').innerText = citation.court || 'N/A';
+    document.getElementById('modalRelevance').innerText = `Relevance: ${citation.relevance_score || 'N/A'}/10`;
+    document.getElementById('modalStrength').innerText = `Strength: ${citation.strength_score || 'N/A'}/10`;
+    document.getElementById('modalDescription').innerText = citation.description || 'No description provided.';
+    document.getElementById('modalWhyCited').innerText = citation.why_cited || 'No reasoning provided.';
+    
+    let linkEl = document.getElementById('modalLink');
+    if (citation.link && citation.link !== "") {
+        linkEl.href = citation.link;
+        linkEl.classList.remove('hidden');
+    } else {
+        linkEl.classList.add('hidden');
+    }
+    
+    document.getElementById('citationModalOverlay').style.display = 'flex';
+}
+
+function closeModal(event) {
+    // If an event is passed, ensure we only close if the overlay itself was clicked, not inner content
+    if (event && event.target !== document.getElementById('citationModalOverlay')) {
+        return;
+    }
+    document.getElementById('citationModalOverlay').style.display = 'none';
+}

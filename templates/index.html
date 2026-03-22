@@ -83,6 +83,48 @@
             color: #f8fafc;
             font-size: 13px;
         }
+        /* Modal Styles */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+}
+.modal {
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 12px;
+    max-width: 550px;
+    width: 90%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    position: relative;
+    animation: slideUp 0.2s ease-out;
+}
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+.modal h3 { margin-top: 0; color: #0f172a; margin-right: 24px; }
+.modal p { margin: 10px 0; font-size: 14px; line-height: 1.5; color: #334155; }
+.modal .close-btn {
+    position: absolute; top: 16px; right: 16px;
+    background: #f1f5f9; border: none; border-radius: 50%;
+    width: 30px; height: 30px; cursor: pointer;
+    font-size: 14px; color: #64748b;
+    display: flex; align-items: center; justify-content: center;
+}
+.modal .close-btn:hover { background: #e2e8f0; color: #0f172a; }
+.modal-badges { margin: 12px 0; }
+.badge {
+    display: inline-block; padding: 4px 10px; border-radius: 6px;
+    font-size: 12px; font-weight: bold; margin-right: 8px;
+}
+.badge-blue { background: #e0f2fe; color: #0369a1; }
+.badge-purple { background: #f3e8ff; color: #7e22ce; }
     </style>
 </head>
 <body>
@@ -123,7 +165,25 @@
         </div>
 
     </div>
-
+    <div id="citationModalOverlay" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeModal()">✕</button>
+            <h3 id="modalTitle">Case Name</h3>
+            <p style="color: #64748b; margin-top: -4px;">Court: <span id="modalCourt"></span></p>
+            
+            <div class="modal-badges">
+                <span class="badge badge-blue" id="modalRelevance">Relevance: </span>
+                <span class="badge badge-purple" id="modalStrength">Strength: </span>
+            </div>
+            
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 16px 0;">
+            
+            <p><strong>Description:</strong><br><span id="modalDescription"></span></p>
+            <p><strong>Why Cited:</strong><br><span id="modalWhyCited"></span></p>
+            
+            <a id="modalLink" href="#" target="_blank" class="hidden" style="display: inline-block; margin-top: 12px; font-size: 14px; color: #2563eb; text-decoration: none;">View Source ↗</a>
+        </div>
+    </div>
     <script src="/static/script.js"></script>
 </body>
 </html>
