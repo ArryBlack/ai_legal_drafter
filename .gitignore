@@ -3,3 +3,6 @@ __pycache__/
 .DS_Store
 .env
 /uploads
+
+validated_case.pdf
+output_case.pdf
