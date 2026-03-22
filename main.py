@@ -13,6 +13,7 @@ from openai import OpenAI
 from openai_client import analyze_case
 from prompt import build_argument
 from pdf_generator import create_pdf
+import tempfile
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -230,11 +231,10 @@ async def generate_pdf():
         if not generated_text:
             raise ValueError('generated_text is empty; run analyze first')
 
-        downloads_dir = os.path.expanduser("~/Downloads")
-        os.makedirs(downloads_dir, exist_ok=True)
+        temp_dir = tempfile.gettempdir()
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"legal_argument_{timestamp}.pdf"
-        path = os.path.join(downloads_dir, filename)
+        path = os.path.join(temp_dir, filename)
 
         create_pdf(generated_text, path)
 
