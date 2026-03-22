@@ -184,10 +184,25 @@ async function validate(){
                         console.info('Validation task completed', statusData.result)
                         appendLog('Validation task completed')
 
-                        let validationData = typeof statusData.result === 'string' ? JSON.parse(statusData.result) : statusData.result
+                        let cleanString = typeof statusData.result === 'string' ? statusData.result.replace(/```json\n?|```/g, '').trim() : statusData.result;
+                        let validationData = typeof cleanString === 'string' ? JSON.parse(cleanString) : cleanString;
 
-                        let validationText = `VALIDATION REPORT\n\nOverall Validity Score: ${validationData.overall_validity_score}/10\nLogic Score: ${validationData.logic_score}/10\nCitation Validity Score: ${validationData.citation_validity_score}/10\n\nIssues Found:\n${validationData.issues_found.map(issue => `- ${issue}`).join('\n')}\n\nSuggested Improvements:\n${validationData.suggested_improvements.map(improvement => `- ${improvement}`).join('\n')}\n\nHallucinated Citations:\n${validationData.hallucinated_citations.map(citation => `- ${citation}`).join('\n')}`
+                        const safeFormat = (item) => typeof item === 'string' ? item : JSON.stringify(item);
+                        let validationText = `VALIDATION REPORT
 
+                            Overall Validity Score: ${validationData.overall_validity_score}/10
+                            Logic Score: ${validationData.logic_score}/10
+                            Citation Validity Score: ${validationData.citation_validity_score}/10
+
+                            Issues Found:
+                            ${(validationData.issues_found || []).map(issue => `- ${safeFormat(issue)}`).join('\n')}
+
+                            Suggested Improvements:
+                            ${(validationData.suggested_improvements || []).map(imp => `- ${safeFormat(imp)}`).join('\n')}
+
+                            Hallucinated Citations:
+                            ${(validationData.hallucinated_citations || []).map(cit => `- ${safeFormat(cit)}`).join('\n')}`;
+                            
                         document.getElementById("validation").innerText = validationText
                         status.innerText = "Validation complete"
                         setControlsEnabled(true)
