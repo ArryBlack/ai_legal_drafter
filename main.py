@@ -74,6 +74,8 @@ async def _run_validation_task(task_id):
         if not original_case_path or not os.path.exists(original_case_path):
             raise ValueError('Original uploaded case PDF not found; upload should be run first')
 
+        create_pdf(generated_text, "output_case.pdf")    
+
         validation = validate_case(
             original_case_path,
             "output_case.pdf",
