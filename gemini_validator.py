@@ -13,7 +13,7 @@ if not gemini_api_key:
 
 genai.configure(api_key=gemini_api_key)
 
-model = genai.GenerativeModel("gemini-1.5-pro")
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 
 def validate_case(original_file_path, generated_pdf_path, json_output):
@@ -42,14 +42,13 @@ Tasks:
 Return JSON format:
 
 {{
-"overall_validity_score":0-10,
-"logic_score":0-10,
-"citation_validity_score":0-10,
-"issues_found":[ ],
-"suggested_improvements":[ ],
-"hallucinated_citations":[ ]
+"overall_validity_score": 0-10,
+"logic_score": 0-10,
+"citation_validity_score": 0-10,
+"issues_found": ["string", "string"],
+"suggested_improvements": ["string", "string"],
+"hallucinated_citations": ["string", "string"]
 }}
-
 Here is the generated case JSON:
 
 {json.dumps(json_output)}
