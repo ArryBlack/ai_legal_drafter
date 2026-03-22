@@ -289,7 +289,7 @@ async function download(){
         let filename = "legal_argument.pdf"
         let contentDisposition = res.headers.get("content-disposition")
         if (contentDisposition) {
-            let match = contentDisposition.match(/filename="?(.*)"?$/)
+            let match = contentDisposition.match(/filename="?([^"]+)"?/)
             if (match && match[1]) filename = match[1]
         }
 
